@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Data.UnityObjects;
 using Data.ValueObjects;
+using Keys;
+using Managers;
 using Sirenix.OdinInspector;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -34,20 +37,46 @@ namespace Controllers.Player
 
         #region Private variables
 
-        
 
-        
+        [ShowInInspector] private float _xValue;
+        private float2 _clampValues;
         private Vector3 currentEulerAngles;
         public Transform pivotPoint;
         #endregion
         
         
         [SerializeField] private new Collider collider;
-        //[SerializeField] private PlayerManager manager;
+        [SerializeField] private PlayerManager manager;
         [SerializeField] private PlayerPhysicsController physicsController;
-        [SerializeField] private CD_Player data;
+        [SerializeField] private PlayerData data;
+        [ShowInInspector] private MovementData _movementData;
+        [ShowInInspector] private RelentlessData _relentlessData;
+        [ShowInInspector] private InvulnerabilityData _ınvulnerabilityData;
+        [ShowInInspector] private CannonData _cannonData;
 
         [ShowInInspector] private bool _isReadyToMove, _isReadyToPlay;
+
+        internal void GetMovementData(MovementData movementData)
+        {
+            _movementData = movementData;
+        }
+        
+        internal void GetRelentlessData(RelentlessData relentlessData)
+        {
+            _relentlessData = relentlessData;
+        }
+
+        internal void GetInvulnerabilityData(InvulnerabilityData ınvulnerabilityData)
+        {
+            _ınvulnerabilityData = ınvulnerabilityData;
+        }
+
+        internal void GetCannonData(CannonData cannonData)
+        {
+            _cannonData = cannonData;
+        }
+        
+        
 
 
         private void Awake()
@@ -73,34 +102,14 @@ namespace Controllers.Player
         // ReSharper disable Unity.PerformanceAnalysis
         private void MovePlayer()
         {
-            pivotPoint.transform.Translate(Vector3.forward * data.ForwardSpeed * Time.deltaTime);
-            //Test için tuşlar atandı. İleride mouse sürüklenerek çalışması yapılacak.
-
+            pivotPoint.transform.Translate(Vector3.forward * _movementData.ForwardSpeed * Time.deltaTime);
+            
             if (Input.GetMouseButton(0))
             {
-                currentEulerAngles += new Vector3(0, 0, -1) * Time.deltaTime * data.SidewaysSpeed;
+                float mouseX = Input.GetAxis("Mouse X");
+                currentEulerAngles += new Vector3(0, 0, mouseX) * Time.deltaTime * _movementData.SidewaysSpeed;
                 currentEulerAngles.z = Mathf.Clamp(currentEulerAngles.z, -16f, 16f);
                 pivotPoint.localEulerAngles = currentEulerAngles;
-
-            }
-
-            if (Input.GetMouseButton(1))
-            {
-                currentEulerAngles += new Vector3(0, 0, 1) * Time.deltaTime * data.SidewaysSpeed;
-                currentEulerAngles.z = Mathf.Clamp(currentEulerAngles.z, -16f, 16f);
-                pivotPoint.localEulerAngles = currentEulerAngles;
-            }
-            //Test için tuş atandı. İleride butona basarak etkinleşecek.
-
-            if (Input.GetKeyUp(KeyCode.E))
-            {
-                InvulnerabilitySkill();
-            }
-            //Test için tuş atandı. İleride komboya göre etkinleşecek.
-
-            if (Input.GetKeyUp(KeyCode.Space))
-            {
-                RelentlessSkill();
             }
         }
 
@@ -108,8 +117,6 @@ namespace Controllers.Player
         {
             pivotPoint.transform.Translate(Vector3.forward * 0 * Time.deltaTime);
             pivotPoint.localEulerAngles = currentEulerAngles;
-            _isReadyToMove = false;
-            _isReadyToPlay = false;
         }
 
         private void StopPlayerHorizontaly()
@@ -117,13 +124,13 @@ namespace Controllers.Player
             
         }
 
-        private void RelentlessSkill()
+        public void RelentlessSkill()
         {
             StartCoroutine(Relentless());
             Debug.Log("You are relentless");
         }
 
-        private void InvulnerabilitySkill()
+        public void InvulnerabilitySkill()
         {
             Debug.Log("Dodging");
             StartCoroutine(PlayerPhysicsController.Instance.Invulnerability());
@@ -131,8 +138,8 @@ namespace Controllers.Player
 
         private void SpeedIncrease()
         {
-            data.ForwardSpeed += data.ForwardSpeed * 5;
-            data.SidewaysSpeed += data.SidewaysSpeed * 5;
+            _movementData.ForwardSpeed += _movementData.ForwardSpeed + 5;
+            _movementData.SidewaysSpeed += _movementData.SidewaysSpeed + 5;
         }
 
         internal void IsReadyToPlay(bool condition)
@@ -144,8 +151,6 @@ namespace Controllers.Player
         {
             _isReadyToMove = condition;
         }
-        
-        //UpdateInputParams
 
 
         internal void OnReset()
@@ -157,18 +162,24 @@ namespace Controllers.Player
 
         IEnumerator Relentless()
         {
-            TurnLevelScript.Instance.enabled = false;
+            TurnLevelScript[] turnLevelScripts = FindObjectsOfType<TurnLevelScript>();
+            foreach (TurnLevelScript tls in turnLevelScripts) {
+                tls.enabled = false;
+            }
             collider.enabled = false;
-            data.ForwardSpeed += data.RelentlessSpeed;
-            float sidewayspeed = data.SidewaysSpeed;
-            data.SidewaysSpeed = 0;
-            data.CannonSpeed += data.RelentlessSpeed;
+            _movementData.ForwardSpeed += _relentlessData.RelentlessSpeed;
+            float sidewayspeed = _movementData.SidewaysSpeed;
+            _movementData.SidewaysSpeed = 0;
+            _cannonData.CannonSpeed += _relentlessData.RelentlessSpeed;
             yield return new WaitForSeconds(3f);
-            TurnLevelScript.Instance.enabled = true;
+            FindObjectsOfType<TurnLevelScript>();
+            foreach (TurnLevelScript tls in turnLevelScripts) {
+                tls.enabled = true;
+            }
             collider.enabled = true;
-            data.ForwardSpeed -= data.RelentlessSpeed;
-            data.SidewaysSpeed += sidewayspeed;
-            data.CannonSpeed -= data.RelentlessSpeed;
+            _movementData.ForwardSpeed -= _relentlessData.RelentlessSpeed;
+            _movementData.SidewaysSpeed += sidewayspeed;
+            _cannonData.CannonSpeed -= _relentlessData.RelentlessSpeed;
 
         }
     }

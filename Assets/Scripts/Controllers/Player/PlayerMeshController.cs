@@ -52,5 +52,10 @@ namespace Controllers.Player
         {
             destroyParticle.Play();
         }
+        
+        internal void OnReset()
+        {
+            
+        }
     }
 }

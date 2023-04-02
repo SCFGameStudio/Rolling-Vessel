@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
+using Controllers.Bullet;
 using UnityEngine;
 using Controllers.Player;
 using Data.UnityObjects;
+using Data.ValueObjects;
+using Managers;
+using Signals;
 
 namespace Controllers.Player
 {
@@ -26,9 +30,15 @@ namespace Controllers.Player
         }
         #endregion
         
-        //[SerializeField] private PlayerManager manager;
-        [SerializeField] private CD_Player data;
+        [SerializeField] private PlayerManager manager;
+        [SerializeField] private InvulnerabilityData _ınvulnerabilityData;
         [SerializeField] private new Collider collider;
+        public bool ableToMove = true;
+        
+        internal void GetInvulnerabilityData(InvulnerabilityData ınvulnerabilityData)
+        {
+            _ınvulnerabilityData = ınvulnerabilityData;
+        }
 
 
         private void Awake()
@@ -41,18 +51,30 @@ namespace Controllers.Player
             if(collider.enabled && other.CompareTag("Enemy"))
             {
                 PlayerMovementController.Instance.StopPlayer();
+                PlayerMovementController.Instance.IsReadyToMove(false);
+                PlayerMovementController.Instance.IsReadyToPlay(false);
+                BulletController.Instance.IsReadyToMove(false);
+                BulletController.Instance.IsReadyToPlay(false);
+                ableToMove = false;
                 Debug.Log("düsmana carptin");
+                //skor ekranına gönder
             }
 
             if (collider.enabled && other.CompareTag("Obstacle"))
             {
                 PlayerMovementController.Instance.StopPlayer();
+                PlayerMovementController.Instance.IsReadyToMove(false);
+                PlayerMovementController.Instance.IsReadyToPlay(false);
+                BulletController.Instance.IsReadyToMove(false);
+                BulletController.Instance.IsReadyToPlay(false);
+                ableToMove = false;
                 Debug.Log("engele carptin");
+                //skor ekranına gönder
             }
             
             if (collider.enabled && other.CompareTag("Treasure"))
             {
-                
+                Debug.Log("Treasure!");
             }
         }
 
@@ -60,9 +82,14 @@ namespace Controllers.Player
         public IEnumerator Invulnerability()
         {
             collider.enabled = false;
-            yield return new WaitForSeconds(data.InvulnerabilityDuration);
+            yield return new WaitForSeconds(_ınvulnerabilityData.InvulnerabilityDuration);
             collider.enabled = true;
             yield return new WaitForSeconds(3f);
+        }
+        
+        internal void OnReset()
+        {
+            ableToMove = true;
         }
     }
 }

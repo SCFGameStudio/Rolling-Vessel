@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Data.UnityObjects;
 using Data.ValueObjects;
+using Managers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,7 +10,27 @@ namespace Controllers.Bullet
 {
     public class BulletController : MonoBehaviour
     {
-        [SerializeField] private CD_Player data;
+        private static BulletController _instance;
+
+        public static BulletController Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    Debug.LogError("BulletController is null");
+                }
+
+                return _instance;
+            }
+        }
+
+        private void Awake()
+        {
+            _instance = this;
+        }
+
+        [SerializeField] private CannonData _cannonData;
 
         public GameObject cannonPrefab;
         public int poolSize = 10;
@@ -16,6 +38,13 @@ namespace Controllers.Bullet
         private List<GameObject> cannonPool;
         private int poolIndex = 0;
         private GameObject cannonParent;
+        [SerializeField] private PlayerManager manager;
+        [ShowInInspector] private bool _isReadyToMove, _isReadyToPlay;
+        
+        internal void GetCannonData(CannonData cannonData)
+        {
+            _cannonData = cannonData;
+        }
 
         void Start()
         {
@@ -29,29 +58,44 @@ namespace Controllers.Bullet
                 cannonPool.Add(cannon);
             }
         }
+        
+        internal void IsReadyToPlay(bool condition)
+        {
+            _isReadyToPlay = condition;
+        }
+
+        internal void IsReadyToMove(bool condition)
+        {
+            _isReadyToMove = condition;
+        }
+        
     
         void Update()
         {
-            shotTimer += Time.deltaTime;
-            if (shotTimer >= data.CannonReloadDuration)
+            if (_isReadyToMove && _isReadyToPlay)
             {
-                shotTimer = 0f;
-                
-                GameObject cannon = cannonPool[poolIndex];
-                poolIndex = (poolIndex + 1) % poolSize;
-                
-                cannon.transform.position = transform.position;
-                cannon.SetActive(true);
-                cannon.transform.forward = transform.forward;
-            }
-            foreach (GameObject cannon in cannonPool)
-            {
-                if (cannon.activeInHierarchy)
+                shotTimer += Time.deltaTime;
+                if (shotTimer >= _cannonData.CannonReloadDuration)
                 {
-                    cannon.transform.Translate(Vector3.forward * data.CannonSpeed * Time.deltaTime);
-                    if (Vector3.Distance(transform.position, cannon.transform.position) > 50f)
+                    shotTimer = 0f;
+
+                    GameObject cannon = cannonPool[poolIndex];
+                    poolIndex = (poolIndex + 1) % poolSize;
+
+                    cannon.transform.position = transform.position + new Vector3(0,1,0);
+                    cannon.SetActive(true);
+                    cannon.transform.forward = transform.forward;
+                }
+
+                foreach (GameObject cannon in cannonPool)
+                {
+                    if (cannon.activeInHierarchy)
                     {
-                        cannon.SetActive(false);
+                        cannon.transform.Translate(Vector3.forward * _cannonData.CannonSpeed * Time.deltaTime);
+                        if (Vector3.Distance(transform.position, cannon.transform.position) > 50f)
+                        {
+                            cannon.SetActive(false);
+                        }
                     }
                 }
             }
