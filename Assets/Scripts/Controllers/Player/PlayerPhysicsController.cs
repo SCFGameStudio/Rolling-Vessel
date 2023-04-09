@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Controllers.Bullet;
+using Controllers.Level;
 using UnityEngine;
 using Controllers.Player;
 using Data.UnityObjects;
@@ -34,7 +35,7 @@ namespace Controllers.Player
         [SerializeField] private InvulnerabilityData _ınvulnerabilityData;
         [SerializeField] private new Collider collider;
         public bool ableToMove = true;
-        
+
         internal void GetInvulnerabilityData(InvulnerabilityData ınvulnerabilityData)
         {
             _ınvulnerabilityData = ınvulnerabilityData;
@@ -56,6 +57,7 @@ namespace Controllers.Player
                 BulletController.Instance.IsReadyToMove(false);
                 BulletController.Instance.IsReadyToPlay(false);
                 ableToMove = false;
+                LevelPanel.Instance.StartGame(false);
                 Debug.Log("düsmana carptin");
                 //skor ekranına gönder
             }
@@ -68,6 +70,7 @@ namespace Controllers.Player
                 BulletController.Instance.IsReadyToMove(false);
                 BulletController.Instance.IsReadyToPlay(false);
                 ableToMove = false;
+                LevelPanel.Instance.StartGame(false);
                 Debug.Log("engele carptin");
                 //skor ekranına gönder
             }
@@ -75,6 +78,8 @@ namespace Controllers.Player
             if (collider.enabled && other.CompareTag("Treasure"))
             {
                 Debug.Log("Treasure!");
+                LevelPanel.Instance.OnCollect();
+
             }
         }
 
@@ -84,7 +89,7 @@ namespace Controllers.Player
             collider.enabled = false;
             yield return new WaitForSeconds(_ınvulnerabilityData.InvulnerabilityDuration);
             collider.enabled = true;
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
         }
         
         internal void OnReset()

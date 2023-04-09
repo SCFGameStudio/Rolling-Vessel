@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data:
     MovementData:
-      ForwardSpeed: 12.19
-      SidewaysSpeed: 242.86
+      ForwardSpeed: 25
+      SidewaysSpeed: 250
     CannonData:
-      CannonSpeed: 83.37
+      CannonSpeed: 100
       CannonReloadDuration: 0.55
     RelentlessData:
       RelentlessSpeed: 20

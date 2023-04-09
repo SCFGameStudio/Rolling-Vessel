@@ -16,7 +16,6 @@ namespace Managers
     public class InputManager : MonoBehaviour
     {
         [ShowInInspector] [Header("Data")] private InputData _data;
-        [Space] [ShowInInspector] private bool _isAvailableForTouch, _isFirstTimeTouchTaken, _isTouching;
 
         private void Awake()
         {
@@ -57,26 +56,12 @@ namespace Managers
                 BulletController.Instance.IsReadyToPlay(true);
             }
         }
-
-        private void OnPlay()
-        {
-            _isAvailableForTouch = true;
-        }
-
-        private void OnEnableInput()
-        {
-            _isAvailableForTouch = true;
-        }
-
-        private void OnDisableInput()
-        {
-            _isAvailableForTouch = false;
-        }
-
         private void OnReset()
         {
             PlayerMovementController.Instance.IsReadyToMove(false);
             PlayerMovementController.Instance.IsReadyToPlay(false);
+            BulletController.Instance.IsReadyToMove(false);
+            BulletController.Instance.IsReadyToPlay(false);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controllers.Level;
 using Data.UnityObjects;
 using Data.ValueObjects;
 using Keys;
@@ -42,6 +43,9 @@ namespace Controllers.Player
         private float2 _clampValues;
         private Vector3 currentEulerAngles;
         public Transform pivotPoint;
+        private bool hasBeenTriggered = false;
+        private Vector3 startPosition;
+        public int gameSpeed = 1;
         #endregion
         
         
@@ -75,8 +79,16 @@ namespace Controllers.Player
         {
             _cannonData = cannonData;
         }
-        
-        
+
+        private void Start()
+        {
+            startPosition = transform.position;
+        }
+
+        public float GetDistanceTraveled()
+        {
+            return Vector3.Distance(startPosition, transform.position);
+        }
 
 
         private void Awake()
@@ -95,6 +107,13 @@ namespace Controllers.Player
             if (_isReadyToMove)
             {
                 MovePlayer();
+                LevelPanel.Instance.StartGame(true);
+            }
+
+            if (Input.GetMouseButtonDown(0) && !hasBeenTriggered)
+            {
+                InvokeRepeating("SpeedIncrease", 10f, 10f);
+                hasBeenTriggered = true;
             }
             else StopPlayerHorizontaly();
         }
@@ -138,8 +157,11 @@ namespace Controllers.Player
 
         private void SpeedIncrease()
         {
-            _movementData.ForwardSpeed += _movementData.ForwardSpeed + 5;
-            _movementData.SidewaysSpeed += _movementData.SidewaysSpeed + 5;
+            Debug.Log("SpeedIncreased");
+            gameSpeed++;
+            _movementData.ForwardSpeed += 3f;
+            _movementData.SidewaysSpeed += 3f;
+            _cannonData.CannonSpeed += 3f;
         }
 
         internal void IsReadyToPlay(bool condition)
@@ -162,20 +184,14 @@ namespace Controllers.Player
 
         IEnumerator Relentless()
         {
-            TurnLevelScript[] turnLevelScripts = FindObjectsOfType<TurnLevelScript>();
-            foreach (TurnLevelScript tls in turnLevelScripts) {
-                tls.enabled = false;
-            }
+            RotationManager.Instance.DisableAllTurnLevelScripts(transform.root);
             collider.enabled = false;
             _movementData.ForwardSpeed += _relentlessData.RelentlessSpeed;
             float sidewayspeed = _movementData.SidewaysSpeed;
             _movementData.SidewaysSpeed = 0;
             _cannonData.CannonSpeed += _relentlessData.RelentlessSpeed;
             yield return new WaitForSeconds(3f);
-            FindObjectsOfType<TurnLevelScript>();
-            foreach (TurnLevelScript tls in turnLevelScripts) {
-                tls.enabled = true;
-            }
+            RotationManager.Instance.EnableAllTurnLevelScripts(transform.root);
             collider.enabled = true;
             _movementData.ForwardSpeed -= _relentlessData.RelentlessSpeed;
             _movementData.SidewaysSpeed += sidewayspeed;

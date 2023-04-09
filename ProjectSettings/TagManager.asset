@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Treasure
   - Cannon
+  - Level
   layers:
   - Default
   - TransparentFX

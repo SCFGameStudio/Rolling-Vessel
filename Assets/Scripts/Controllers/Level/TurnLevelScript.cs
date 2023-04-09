@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Controllers.Player;
+using Managers;
 using UnityEngine;
 
 public class TurnLevelScript : MonoBehaviour
@@ -31,7 +33,7 @@ public class TurnLevelScript : MonoBehaviour
 
     #endregion
     
-    [SerializeField]private float rotationSpeed = 80;
+    //[SerializeField]private float rotationSpeed = 80;
     private Vector3 currentEulerAngles;
 
     private void Update()
@@ -39,7 +41,7 @@ public class TurnLevelScript : MonoBehaviour
         if (Input.GetMouseButton(0) && PlayerPhysicsController.Instance.ableToMove == true)
         {
             float mouseX = Input.GetAxis("Mouse X");
-            currentEulerAngles += new Vector3(0, 0, -mouseX) * Time.deltaTime * rotationSpeed;
+            currentEulerAngles += new Vector3(0, 0, -mouseX) * Time.deltaTime * RotationManager.Instance.GetRotationSpeed();
             transform.localEulerAngles = currentEulerAngles;
         }
     }

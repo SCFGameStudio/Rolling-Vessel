@@ -8,8 +8,8 @@ namespace Managers
 {
     public class LevelGenerator : MonoBehaviour
     {
-        private const float PlayerDistanceSpawnLevelPart = 200f;
-        private const float LevelPartDestroyDistance = 500f;
+        private const float PlayerDistanceSpawnLevelPart = 100f;
+        private const float LevelPartDestroyDistance = 800f;
 
         [SerializeField] private Transform levelPartStart;
         [SerializeField] private List<Transform> levelPartList;
@@ -21,7 +21,7 @@ namespace Managers
         private void Awake()
         {
             _lastEndPosition = levelPartStart.Find("EndPosition").position;
-            int startingSpawnLevelParts = 5;
+            int startingSpawnLevelParts = 2;
             for (int i = 0; i < startingSpawnLevelParts; i++)
             {
                 SpawnLevelPart();
