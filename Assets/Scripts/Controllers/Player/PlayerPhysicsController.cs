@@ -34,6 +34,7 @@ namespace Controllers.Player
         [SerializeField] private PlayerManager manager;
         [SerializeField] private InvulnerabilityData _ınvulnerabilityData;
         [SerializeField] private new Collider collider;
+        public bool isInvulnerabilityAvailable = true;
         public bool ableToMove = true;
 
         internal void GetInvulnerabilityData(InvulnerabilityData ınvulnerabilityData)
@@ -58,6 +59,7 @@ namespace Controllers.Player
                 BulletController.Instance.IsReadyToPlay(false);
                 ableToMove = false;
                 LevelPanel.Instance.StartGame(false);
+                LevelPanel.Instance.OnCrash();
                 Debug.Log("düsmana carptin");
                 //skor ekranına gönder
             }
@@ -71,6 +73,7 @@ namespace Controllers.Player
                 BulletController.Instance.IsReadyToPlay(false);
                 ableToMove = false;
                 LevelPanel.Instance.StartGame(false);
+                LevelPanel.Instance.OnCrash();
                 Debug.Log("engele carptin");
                 //skor ekranına gönder
             }
@@ -79,17 +82,26 @@ namespace Controllers.Player
             {
                 Debug.Log("Treasure!");
                 LevelPanel.Instance.OnCollect();
+                DestroyObject(other.gameObject);
 
             }
+        }
+
+        private void DestroyObject(GameObject gameObject)
+        {
+            
+            Destroy(gameObject);
         }
 
 
         public IEnumerator Invulnerability()
         {
+            isInvulnerabilityAvailable = false;
             collider.enabled = false;
             yield return new WaitForSeconds(_ınvulnerabilityData.InvulnerabilityDuration);
             collider.enabled = true;
             yield return new WaitForSeconds(2f);
+            isInvulnerabilityAvailable = true;
         }
         
         internal void OnReset()

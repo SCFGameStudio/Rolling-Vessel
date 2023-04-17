@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Controllers.Level;
 using Data.UnityObjects;
 using Data.ValueObjects;
 using Managers;
@@ -69,6 +70,11 @@ namespace Controllers.Bullet
             _isReadyToMove = condition;
         }
         
+        private void DestroyObject(GameObject gameObject)
+        {
+            Destroy(gameObject);
+        }
+        
     
         void Update()
         {
@@ -91,10 +97,31 @@ namespace Controllers.Bullet
                 {
                     if (cannon.activeInHierarchy)
                     {
-                        cannon.transform.Translate(Vector3.forward * _cannonData.CannonSpeed * Time.deltaTime);
-                        if (Vector3.Distance(transform.position, cannon.transform.position) > 50f)
+                        cannon.transform.Translate(Vector3.forward * (_cannonData.CannonSpeed * Time.deltaTime));
+                        if (Vector3.Distance(transform.position, cannon.transform.position) > 75f)
                         {
                             cannon.SetActive(false);
+                        }
+                        
+                        Collider[] colliders = Physics.OverlapSphere(cannon.transform.position, 0.2f);
+                        foreach (Collider collider in colliders)
+                        {
+                            if (collider.CompareTag("Obstacle"))
+                            {
+                                Debug.Log("cannonengelecarptı");
+                                cannon.SetActive(false);
+                                break;
+                            }
+
+                            if (collider.CompareTag("Enemy"))
+                            {
+                                Debug.Log("düşmanı vurdun");
+                                LevelPanel.Instance.OnKill();
+                                DestroyObject(collider.gameObject);
+                                cannon.SetActive(false);
+                                break;
+
+                            }
                         }
                     }
                 }

@@ -9,6 +9,7 @@ TagManager:
   - Treasure
   - Cannon
   - Level
+  - Destroyer
   layers:
   - Default
   - TransparentFX

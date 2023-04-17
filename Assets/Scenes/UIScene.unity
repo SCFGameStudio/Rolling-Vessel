@@ -533,7 +533,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1288,7 +1288,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6ae6e1c1077055f4d860e6d9d4643b83, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b2698006523d5f94eb8506a02af474f3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

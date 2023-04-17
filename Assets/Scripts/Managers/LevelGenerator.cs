@@ -8,7 +8,7 @@ namespace Managers
 {
     public class LevelGenerator : MonoBehaviour
     {
-        private const float PlayerDistanceSpawnLevelPart = 100f;
+        private const float PlayerDistanceSpawnLevelPart = 300f;
         private const float LevelPartDestroyDistance = 800f;
 
         [SerializeField] private Transform levelPartStart;

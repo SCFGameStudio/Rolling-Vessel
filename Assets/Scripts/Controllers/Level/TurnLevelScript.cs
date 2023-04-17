@@ -38,11 +38,14 @@ public class TurnLevelScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && PlayerPhysicsController.Instance.ableToMove == true)
+        if (PlayerMovementController.Instance.isRelentless == false)
         {
-            float mouseX = Input.GetAxis("Mouse X");
-            currentEulerAngles += new Vector3(0, 0, -mouseX) * Time.deltaTime * RotationManager.Instance.GetRotationSpeed();
-            transform.localEulerAngles = currentEulerAngles;
+            if (Input.GetMouseButton(0) && PlayerPhysicsController.Instance.ableToMove == true)
+            {
+                float mouseX = Input.GetAxis("Mouse X");
+                currentEulerAngles += new Vector3(0, 0, -mouseX) * Time.deltaTime * RotationManager.Instance.GetRotationSpeed();
+                transform.localEulerAngles = currentEulerAngles;
+            }
         }
     }
 }

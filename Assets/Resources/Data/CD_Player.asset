@@ -20,6 +20,6 @@ MonoBehaviour:
       CannonSpeed: 100
       CannonReloadDuration: 0.55
     RelentlessData:
-      RelentlessSpeed: 20
+      RelentlessSpeed: 60
     InvulnerabilityData:
       InvulnerabilityDuration: 2

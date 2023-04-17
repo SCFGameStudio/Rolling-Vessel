@@ -7,12 +7,5 @@ namespace Data.UnityObjects
     public class CD_Player : ScriptableObject
     {
         public PlayerData Data;
-        
-        //ublic float ForwardSpeed;
-        //public float SidewaysSpeed;
-        //public float CannonSpeed;
-        //public float CannonReloadDuration;
-        //public float RelentlessSpeed;
-        //public float InvulnerabilityDuration;
     }
 }

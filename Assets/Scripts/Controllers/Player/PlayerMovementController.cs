@@ -46,6 +46,7 @@ namespace Controllers.Player
         private bool hasBeenTriggered = false;
         private Vector3 startPosition;
         public int gameSpeed = 1;
+        public bool isRelentless;
         #endregion
         
         
@@ -184,6 +185,7 @@ namespace Controllers.Player
 
         IEnumerator Relentless()
         {
+            isRelentless = true;
             RotationManager.Instance.DisableAllTurnLevelScripts(transform.root);
             collider.enabled = false;
             _movementData.ForwardSpeed += _relentlessData.RelentlessSpeed;
@@ -191,12 +193,12 @@ namespace Controllers.Player
             _movementData.SidewaysSpeed = 0;
             _cannonData.CannonSpeed += _relentlessData.RelentlessSpeed;
             yield return new WaitForSeconds(3f);
+            isRelentless = false;
             RotationManager.Instance.EnableAllTurnLevelScripts(transform.root);
             collider.enabled = true;
             _movementData.ForwardSpeed -= _relentlessData.RelentlessSpeed;
             _movementData.SidewaysSpeed += sidewayspeed;
             _cannonData.CannonSpeed -= _relentlessData.RelentlessSpeed;
-
         }
     }
 }

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using Controllers.Player;
 using Interfaces;
+using Managers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Controllers.Level
 {
@@ -27,8 +30,16 @@ namespace Controllers.Level
         private List<ILevelPanelObserver> observers = new List<ILevelPanelObserver>();
         private float totalDistanceTraveled = 0;
         private int coinCount = 0;
+        public int comboCount = 0;
         private bool gameStarted = false;
-        [SerializeField] private TextMeshProUGUI coinCountText;
+        private PlayerManager playerManager;
+        [SerializeField]private GameObject levelPanel;
+        [SerializeField]private GameObject losePanel;
+        [SerializeField] private TextMeshProUGUI failPanelText;
+
+        [SerializeField] private Image ınvulnerabilityImage;
+        [SerializeField] private Image relentlessImage;
+        //[SerializeField] private TextMeshProUGUI coinCountText;
         [SerializeField] private TextMeshProUGUI highScoreText;
 
         private void Awake()
@@ -72,36 +83,93 @@ namespace Controllers.Level
         private void OnGUI()
         {
             highScoreText.text = totalDistanceTraveled.ToString();
+
+            if (PlayerPhysicsController.Instance.isInvulnerabilityAvailable == false)
+            {
+                ınvulnerabilityImage.color = new Color(100, 100, 100, 0.4f);
+            }
+
+            if (PlayerPhysicsController.Instance.isInvulnerabilityAvailable == true)
+            {
+                ınvulnerabilityImage.color = new Color(100, 100, 100, 1f);
+            }
+
+            if (comboCount >= 10)
+            {
+                relentlessImage.color = new Color(100, 100, 100, 1f);
+            }
+
+            if (comboCount < 10)
+            {
+                relentlessImage.color = new Color(100, 100, 100, 0.4f);
+            }
+            
         }
 
-        public void UpdateCoinCount(int count)
-        {
-            coinCountText.text = count.ToString();
-        }
+        //public void UpdateCoinCount(int count)
+        //{
+        //    coinCountText.text = count.ToString();
+        //}
 
         public void OnRelentlessButtonClicked()
         {
-            NotifyObservers(PlayerAction.RelentlessSkill);
-            PlayerMovementController.Instance.RelentlessSkill();
+            if (comboCount >= 10)
+            {
+                NotifyObservers(PlayerAction.RelentlessSkill);
+                PlayerMovementController.Instance.RelentlessSkill();
+                comboCount = 0;
+            }
+            else
+            {
+                Debug.Log("Relentless is not available");
+            }
         }
 
         public void OnInvulnerabilityButtonClicked()
         {
-            NotifyObservers(PlayerAction.InvulnerabilitySkill);
-            PlayerMovementController.Instance.InvulnerabilitySkill();
-            
+            if (PlayerPhysicsController.Instance.isInvulnerabilityAvailable == true)
+            {
+                NotifyObservers(PlayerAction.InvulnerabilitySkill);
+                PlayerMovementController.Instance.InvulnerabilitySkill();
+            }
+            else
+            {
+                Debug.Log("Wait for cooldown");
+            }
+
         }
 
         public void OnCrash()
         {
             NotifyObservers(PlayerAction.Crash);
+            levelPanel.gameObject.SetActive(false);
+            losePanel.gameObject.SetActive(true);
+            failPanelText.text = totalDistanceTraveled.ToString();
+        }
+
+        public void OnRestartButtonClicked()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void OnMainMenuButtonClicked()
+        {
+            SceneManager.LoadScene(0);
         }
 
         public void OnCollect()
         {
             NotifyObservers(PlayerAction.Collect);
+            totalDistanceTraveled += 1000;
             coinCount++;
-            UpdateCoinCount(coinCount);
+            //UpdateCoinCount(coinCount);
+        }
+
+        public void OnKill()
+        {
+            NotifyObservers(PlayerAction.Kill);
+            comboCount++;
+            Debug.Log(comboCount);
         }
     }
 }
