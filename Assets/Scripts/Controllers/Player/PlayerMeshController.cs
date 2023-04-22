@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Managers;
 using UnityEngine;
 
 namespace Controllers.Player
@@ -25,8 +25,7 @@ namespace Controllers.Player
             }
         }
         #endregion
-
-        //[SerializeField] private PlayerManager manager;
+        
         [SerializeField] private ParticleSystem waterParticle;
         [SerializeField] private ParticleSystem fireParticle;
         [SerializeField] private ParticleSystem destroyParticle;

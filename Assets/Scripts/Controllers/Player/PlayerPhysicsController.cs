@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Controllers.Bullet;
 using Controllers.Level;
 using UnityEngine;
-using Controllers.Player;
-using Data.UnityObjects;
 using Data.ValueObjects;
 using Managers;
-using Signals;
 
 namespace Controllers.Player
 {
@@ -31,7 +27,6 @@ namespace Controllers.Player
         }
         #endregion
         
-        [SerializeField] private PlayerManager manager;
         [SerializeField] private InvulnerabilityData _ınvulnerabilityData;
         [SerializeField] private new Collider collider;
         public bool isInvulnerabilityAvailable = true;
@@ -61,7 +56,6 @@ namespace Controllers.Player
                 LevelPanel.Instance.StartGame(false);
                 LevelPanel.Instance.OnCrash();
                 Debug.Log("düsmana carptin");
-                //skor ekranına gönder
             }
 
             if (collider.enabled && other.CompareTag("Obstacle"))
@@ -75,7 +69,6 @@ namespace Controllers.Player
                 LevelPanel.Instance.StartGame(false);
                 LevelPanel.Instance.OnCrash();
                 Debug.Log("engele carptin");
-                //skor ekranına gönder
             }
             
             if (collider.enabled && other.CompareTag("Treasure"))
@@ -87,10 +80,10 @@ namespace Controllers.Player
             }
         }
 
-        private void DestroyObject(GameObject gameObject)
+        private void DestroyObject(GameObject objectsGameObject)
         {
             
-            Destroy(gameObject);
+            Destroy(objectsGameObject);
         }
 
 

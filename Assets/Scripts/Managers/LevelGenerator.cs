@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,13 +15,13 @@ namespace Managers
         [SerializeField] private GameObject player;
 
         private Vector3 _lastEndPosition;
-        [ShowInInspector]private List<Transform> _spawnedLevelParts = new List<Transform>();
+        [ShowInInspector]private List<Transform> _spawnedLevelParts = new();
 
         private void Awake()
         {
             _lastEndPosition = levelPartStart.Find("EndPosition").position;
-            int startingSpawnLevelParts = 2;
-            for (int i = 0; i < startingSpawnLevelParts; i++)
+            const int startingSpawnLevelParts = 2;
+            for (var i = 0; i < startingSpawnLevelParts; i++)
             {
                 SpawnLevelPart();
             }
@@ -35,9 +34,9 @@ namespace Managers
                 SpawnLevelPart();
             }
             
-            for (int i = 0; i < _spawnedLevelParts.Count; i++)
+            for (var i = 0; i < _spawnedLevelParts.Count; i++)
             {
-                Transform levelPart = _spawnedLevelParts[i];
+                var levelPart = _spawnedLevelParts[i];
                 if (levelPart != null && Vector3.Distance(player.transform.position, levelPart.position) > LevelPartDestroyDistance)
                 {
                     _spawnedLevelParts.RemoveAt(i);
@@ -48,16 +47,15 @@ namespace Managers
 
         private void SpawnLevelPart()
         {
-            Transform chosenLevelPart = levelPartList[Random.Range(0, levelPartList.Count)];
-            Transform lastLevelPartTransform = SpawnLevelPart(chosenLevelPart, _lastEndPosition);
+            var chosenLevelPart = levelPartList[Random.Range(0, levelPartList.Count)];
+            var lastLevelPartTransform = SpawnLevelPart(chosenLevelPart, _lastEndPosition);
             _lastEndPosition = lastLevelPartTransform.Find("EndPosition").position;
-            
             _spawnedLevelParts.Add(lastLevelPartTransform);
         }
 
-        private Transform SpawnLevelPart(Transform levelPart,Vector3 spawnPosition)
+        private static Transform SpawnLevelPart(Transform levelPart,Vector3 spawnPosition)
         {
-            Transform levelPartTransform = Instantiate(levelPart, spawnPosition, Quaternion.identity);
+            var levelPartTransform = Instantiate(levelPart, spawnPosition, Quaternion.identity);
             return levelPartTransform;
         }
     }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Controllers.Bullet;
+﻿using Controllers.Bullet;
 using Controllers.Player;
 using Data.UnityObjects;
 using Data.ValueObjects;
-using Signals;
 using Sirenix.OdinInspector;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using Keys;
 
 namespace Managers
 {
@@ -22,7 +16,7 @@ namespace Managers
             _data = GetInputData();
         }
 
-        private InputData GetInputData()
+        private static InputData GetInputData()
         {
             return Resources.Load<CD_Input>("Data/CD_Input").data;
         }
@@ -48,7 +42,7 @@ namespace Managers
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0) && PlayerPhysicsController.Instance.ableToMove == true)
+            if (Input.GetMouseButtonDown(0) && PlayerPhysicsController.Instance.ableToMove)
             {
                 PlayerMovementController.Instance.IsReadyToMove(true);
                 PlayerMovementController.Instance.IsReadyToPlay(true);

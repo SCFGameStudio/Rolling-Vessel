@@ -1,6 +1,4 @@
 using System;
-using UnityEngine;
-
 namespace Data.ValueObjects
 {
     [Serializable]

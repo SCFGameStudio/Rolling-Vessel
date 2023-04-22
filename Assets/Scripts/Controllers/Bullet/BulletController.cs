@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Controllers.Level;
-using Data.UnityObjects;
 using Data.ValueObjects;
 using Managers;
 using Sirenix.OdinInspector;
@@ -31,32 +29,32 @@ namespace Controllers.Bullet
             _instance = this;
         }
 
-        [SerializeField] private CannonData _cannonData;
+        [SerializeField] private PlayerData data;
 
         public GameObject cannonPrefab;
         public int poolSize = 10;
-        private float shotTimer = 0f;
-        private List<GameObject> cannonPool;
-        private int poolIndex = 0;
-        private GameObject cannonParent;
+        private float _shotTimer;
+        private List<GameObject> _cannonPool;
+        private int _poolIndex;
+        private GameObject _cannonParent;
         [SerializeField] private PlayerManager manager;
         [ShowInInspector] private bool _isReadyToMove, _isReadyToPlay;
         
         internal void GetCannonData(CannonData cannonData)
         {
-            _cannonData = cannonData;
+            data.CannonData = cannonData;
         }
 
-        void Start()
+        private void Start()
         {
-            cannonParent = new GameObject("Cannons");
-            cannonPool = new List<GameObject>();
-            for (int i = 0; i < poolSize; i++)
+            _cannonParent = new GameObject("Cannons");
+            _cannonPool = new List<GameObject>();
+            for (var i = 0; i < poolSize; i++)
             {
-                GameObject cannon = Instantiate(cannonPrefab, cannonParent.transform);
+                var cannon = Instantiate(cannonPrefab, _cannonParent.transform);
                 cannon.tag = "Cannon";
                 cannon.SetActive(false);
-                cannonPool.Add(cannon);
+                _cannonPool.Add(cannon);
             }
         }
         
@@ -70,59 +68,55 @@ namespace Controllers.Bullet
             _isReadyToMove = condition;
         }
         
-        private void DestroyObject(GameObject gameObject)
+        private void DestroyObject(GameObject destroyGameObject)
         {
-            Destroy(gameObject);
+            Destroy(destroyGameObject);
         }
         
     
         void Update()
         {
-            if (_isReadyToMove && _isReadyToPlay)
+            if (!_isReadyToMove || !_isReadyToPlay) return;
+            _shotTimer += Time.deltaTime;
+            if (_shotTimer >= data.CannonData.CannonReloadDuration)
             {
-                shotTimer += Time.deltaTime;
-                if (shotTimer >= _cannonData.CannonReloadDuration)
+                _shotTimer = 0f;
+
+                var cannon = _cannonPool[_poolIndex];
+                _poolIndex = (_poolIndex + 1) % poolSize;
+
+                cannon.transform.position = transform.position + new Vector3(0,1,0);
+                cannon.SetActive(true);
+                cannon.transform.forward = transform.forward;
+            }
+
+            foreach (var cannon in _cannonPool)
+            {
+                if (!cannon.activeInHierarchy) continue;
+                cannon.transform.Translate(Vector3.forward * (data.CannonData.CannonSpeed * Time.deltaTime));
+                if (Vector3.Distance(transform.position, cannon.transform.position) > 75f)
                 {
-                    shotTimer = 0f;
-
-                    GameObject cannon = cannonPool[poolIndex];
-                    poolIndex = (poolIndex + 1) % poolSize;
-
-                    cannon.transform.position = transform.position + new Vector3(0,1,0);
-                    cannon.SetActive(true);
-                    cannon.transform.forward = transform.forward;
+                    cannon.SetActive(false);
                 }
-
-                foreach (GameObject cannon in cannonPool)
-                {
-                    if (cannon.activeInHierarchy)
-                    {
-                        cannon.transform.Translate(Vector3.forward * (_cannonData.CannonSpeed * Time.deltaTime));
-                        if (Vector3.Distance(transform.position, cannon.transform.position) > 75f)
-                        {
-                            cannon.SetActive(false);
-                        }
                         
-                        Collider[] colliders = Physics.OverlapSphere(cannon.transform.position, 0.2f);
-                        foreach (Collider collider in colliders)
-                        {
-                            if (collider.CompareTag("Obstacle"))
-                            {
-                                Debug.Log("cannonengelecarptı");
-                                cannon.SetActive(false);
-                                break;
-                            }
+                var colliders = Physics.OverlapSphere(cannon.transform.position, 0.2f);
+                foreach (Collider collider1 in colliders)
+                {
+                    if (collider1.CompareTag("Obstacle"))
+                    {
+                        Debug.Log("cannonengelecarptı");
+                        cannon.SetActive(false);
+                        break;
+                    }
 
-                            if (collider.CompareTag("Enemy"))
-                            {
-                                Debug.Log("düşmanı vurdun");
-                                LevelPanel.Instance.OnKill();
-                                DestroyObject(collider.gameObject);
-                                cannon.SetActive(false);
-                                break;
+                    if (collider1.CompareTag("Enemy"))
+                    {
+                        Debug.Log("düşmanı vurdun");
+                        LevelPanel.Instance.OnKill();
+                        DestroyObject(collider1.gameObject);
+                        cannon.SetActive(false);
+                        break;
 
-                            }
-                        }
                     }
                 }
             }

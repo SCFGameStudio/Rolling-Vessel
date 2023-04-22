@@ -1,51 +1,47 @@
-using System;
-using System.Collections.Generic;
 using Controllers.Player;
 using Managers;
 using UnityEngine;
 
-public class TurnLevelScript : MonoBehaviour
+namespace Controllers.Level
 {
-    #region Instance
-
-        
-
-        
-    private static TurnLevelScript _instance;
-
-    public static TurnLevelScript Instance
+    public class TurnLevelScript : MonoBehaviour
     {
-        get
-        {
-            if (_instance == null)
-            {
-                Debug.LogError("TurnLevelScript is null");
-            }
+        #region Instance
 
-            return _instance;
+        
+
+        
+        private static TurnLevelScript _instance;
+
+        public static TurnLevelScript Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    Debug.LogError("TurnLevelScript is null");
+                }
+
+                return _instance;
+            }
         }
-    }
 
-    private void Awake()
-    {
-        _instance = this;
-    }
-
-    #endregion
-    
-    //[SerializeField]private float rotationSpeed = 80;
-    private Vector3 currentEulerAngles;
-
-    private void Update()
-    {
-        if (PlayerMovementController.Instance.isRelentless == false)
+        private void Awake()
         {
-            if (Input.GetMouseButton(0) && PlayerPhysicsController.Instance.ableToMove == true)
-            {
-                float mouseX = Input.GetAxis("Mouse X");
-                currentEulerAngles += new Vector3(0, 0, -mouseX) * Time.deltaTime * RotationManager.Instance.GetRotationSpeed();
-                transform.localEulerAngles = currentEulerAngles;
-            }
+            _instance = this;
+        }
+
+        #endregion
+    
+        private Vector3 _currentEulerAngles;
+
+        private void Update()
+        {
+            if (PlayerMovementController.Instance.isRelentless) return;
+            if (!Input.GetMouseButton(0) || PlayerPhysicsController.Instance.ableToMove != true) return;
+            var mouseX = Input.GetAxis("Mouse X");
+            _currentEulerAngles += new Vector3(0, 0, -mouseX) * (Time.deltaTime * RotationManager.Instance.GetRotationSpeed());
+            transform.localEulerAngles = _currentEulerAngles;
         }
     }
 }

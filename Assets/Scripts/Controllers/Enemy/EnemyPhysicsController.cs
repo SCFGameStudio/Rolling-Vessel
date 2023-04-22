@@ -1,6 +1,4 @@
-﻿using System;
-using Controllers.Level;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Controllers.Enemy
 {
