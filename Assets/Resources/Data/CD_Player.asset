@@ -15,7 +15,7 @@ MonoBehaviour:
   Data:
     MovementData:
       ForwardSpeed: 25
-      SidewaysSpeed: 250
+      SidewaysSpeed: 5
     CannonData:
       CannonSpeed: 100
       CannonReloadDuration: 0.55

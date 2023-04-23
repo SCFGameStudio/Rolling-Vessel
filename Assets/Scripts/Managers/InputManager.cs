@@ -42,13 +42,20 @@ namespace Managers
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0) && PlayerPhysicsController.Instance.ableToMove)
-            {
-                PlayerMovementController.Instance.IsReadyToMove(true);
-                PlayerMovementController.Instance.IsReadyToPlay(true);
-                BulletController.Instance.IsReadyToMove(true);
-                BulletController.Instance.IsReadyToPlay(true);
-            }
+            // if (Input.GetMouseButtonDown(0) && PlayerPhysicsController.Instance.ableToMove)
+            // {
+            //     PlayerMovementController.Instance.IsReadyToMove(true);
+            //     PlayerMovementController.Instance.IsReadyToPlay(true);
+            //     BulletController.Instance.IsReadyToMove(true);
+            //     BulletController.Instance.IsReadyToPlay(true);
+            // }
+            if (Input.touchCount <= 0) return;
+            var touch = Input.GetTouch(0);
+            if (touch.phase != TouchPhase.Began || !PlayerPhysicsController.Instance.ableToMove) return;
+            PlayerMovementController.Instance.IsReadyToMove(true);
+            PlayerMovementController.Instance.IsReadyToPlay(true);
+            BulletController.Instance.IsReadyToMove(true);
+            BulletController.Instance.IsReadyToPlay(true);
         }
         private void OnReset()
         {
