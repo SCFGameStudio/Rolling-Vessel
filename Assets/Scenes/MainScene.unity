@@ -247,6 +247,7 @@ MonoBehaviour:
   levelPartStart: {fileID: 716020790}
   levelPartList:
   - {fileID: 7946863401475484567, guid: 220c9d61900200543813b52c0d0df1f3, type: 3}
+  - {fileID: 7946863401475484567, guid: 0dc0dc036a28e4246a8e7e58b179c333, type: 3}
   player: {fileID: 526054383}
 --- !u!1 &31748147
 GameObject:
