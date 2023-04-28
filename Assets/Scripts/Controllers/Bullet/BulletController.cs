@@ -31,8 +31,8 @@ namespace Controllers.Bullet
 
         [SerializeField] private PlayerData data;
 
-        public GameObject cannonPrefab;
-        public int poolSize = 10;
+        public GameObject CannonPrefab;
+        private int poolSize = 10;
         private float _shotTimer;
         private List<GameObject> _cannonPool;
         private int _poolIndex;
@@ -51,7 +51,7 @@ namespace Controllers.Bullet
             _cannonPool = new List<GameObject>();
             for (var i = 0; i < poolSize; i++)
             {
-                var cannon = Instantiate(cannonPrefab, _cannonParent.transform);
+                var cannon = Instantiate(CannonPrefab, _cannonParent.transform);
                 cannon.tag = "Cannon";
                 cannon.SetActive(false);
                 _cannonPool.Add(cannon);
@@ -104,14 +104,12 @@ namespace Controllers.Bullet
                 {
                     if (collider1.CompareTag("Obstacle"))
                     {
-                        Debug.Log("cannonengelecarptı");
                         cannon.SetActive(false);
                         break;
                     }
 
                     if (collider1.CompareTag("Enemy"))
                     {
-                        Debug.Log("düşmanı vurdun");
                         LevelPanel.Instance.OnKill();
                         DestroyObject(collider1.gameObject);
                         cannon.SetActive(false);

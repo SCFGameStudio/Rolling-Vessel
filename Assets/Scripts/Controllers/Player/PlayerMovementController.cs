@@ -2,7 +2,6 @@
 using Controllers.Bullet;
 using Controllers.Level;
 using Data.ValueObjects;
-using Managers;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
@@ -138,18 +137,15 @@ namespace Controllers.Player
         public void RelentlessSkill()
         {
             StartCoroutine(Relentless());
-            Debug.Log("You are relentless");
         }
 
         public void InvulnerabilitySkill()
         {
-            Debug.Log("Dodging");
             StartCoroutine(PlayerPhysicsController.Instance.Invulnerability());
         }
 
         private void SpeedIncrease()
         {
-            Debug.Log("SpeedIncreased");
             gameSpeed++;
             data.MovementData.ForwardSpeed += 3f;
             data.MovementData.SidewaysSpeed += 3f;

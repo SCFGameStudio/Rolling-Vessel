@@ -215,7 +215,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &13405679
 Transform:
@@ -420,7 +420,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &135454347
 MonoBehaviour:
@@ -990,7 +990,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!108 &410087040
 Light:
@@ -1255,7 +1255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 349414b1469d4c78a417504ed780a0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetObject: {fileID: 31748150}
+  TargetObject: {fileID: 31748150}
 --- !u!65 &483015617
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1562,9 +1562,8 @@ MonoBehaviour:
       RelentlessSpeed: 0
     InvulnerabilityData:
       InvulnerabilityDuration: 0
-  cannonPrefab: {fileID: 4105247343907456774, guid: ab41f3028ef40f84f969422e4d226426,
+  CannonPrefab: {fileID: 4105247343907456774, guid: ab41f3028ef40f84f969422e4d226426,
     type: 3}
-  poolSize: 10
   manager: {fileID: 526054386}
 --- !u!1 &660974705
 GameObject:
@@ -1797,7 +1796,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &832575518
 MonoBehaviour:
@@ -2086,7 +2085,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1125980374
 Transform:
@@ -2380,7 +2379,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1386019946
 Transform:

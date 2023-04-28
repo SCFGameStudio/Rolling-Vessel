@@ -1,17 +1,15 @@
-﻿using System;
-using Controllers.Level;
-using Unity.VisualScripting;
+﻿using Controllers.Level;
 using UnityEngine;
 
 namespace Handlers
 {
     public class ObjectDestroyer : MonoBehaviour
     {
-        public Transform targetObject;
+        public Transform TargetObject;
 
         void Update()
         {
-            transform.position = targetObject.position - new Vector3(0,0,5);
+            transform.position = TargetObject.position - new Vector3(0,0,5);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -21,22 +19,22 @@ namespace Handlers
                 if (LevelPanel.Instance.comboCount >= 1f)
                 {
                     LevelPanel.Instance.comboCount--;
-                    Destroy(other.gameObject, 2f);
+                    Destroy(other.gameObject, 1f);
                 }
                 else
                 {
-                    Destroy(other.gameObject, 2f);
+                    Destroy(other.gameObject, 1f);
                 }
             }
 
             if (other.CompareTag("Obstacle"))
             {
-                Destroy(other.gameObject, 2f);
+                Destroy(other.gameObject, 1f);
             }
 
             if (other.CompareTag("Treasure"))
             {
-                Destroy(other.gameObject, 2f);
+                Destroy(other.gameObject, 1f);
             }
         }
     }

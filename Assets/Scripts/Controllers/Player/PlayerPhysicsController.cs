@@ -3,7 +3,6 @@ using Controllers.Bullet;
 using Controllers.Level;
 using UnityEngine;
 using Data.ValueObjects;
-using Managers;
 
 namespace Controllers.Player
 {
@@ -55,7 +54,6 @@ namespace Controllers.Player
                 ableToMove = false;
                 LevelPanel.Instance.StartGame(false);
                 LevelPanel.Instance.OnCrash();
-                Debug.Log("düsmana carptin");
             }
 
             if (collider.enabled && other.CompareTag("Obstacle"))
@@ -68,12 +66,10 @@ namespace Controllers.Player
                 ableToMove = false;
                 LevelPanel.Instance.StartGame(false);
                 LevelPanel.Instance.OnCrash();
-                Debug.Log("engele carptin");
             }
             
             if (collider.enabled && other.CompareTag("Treasure"))
             {
-                Debug.Log("Treasure!");
                 LevelPanel.Instance.OnCollect();
                 DestroyObject(other.gameObject);
 

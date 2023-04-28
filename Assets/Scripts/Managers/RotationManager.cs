@@ -27,12 +27,10 @@ namespace Managers
         private void Awake()
         {
             _instance = this;
-        }
-
-        private void Start()
-        {
             StartCoroutine(SearchForNewObjects());
         }
+        
+        
 
         private IEnumerator<WaitForSeconds> SearchForNewObjects()
         {
