@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Controllers.Level;
 using Data.ValueObjects;
-using Managers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -30,14 +30,14 @@ namespace Controllers.Bullet
         }
 
         [SerializeField] private PlayerData data;
-
-        public GameObject CannonPrefab;
-        private int poolSize = 10;
+        [SerializeField] private GameObject cannonPrefab;
+        
+        private int _poolSize = 10;
         private float _shotTimer;
         private List<GameObject> _cannonPool;
         private int _poolIndex;
         private GameObject _cannonParent;
-        [SerializeField] private PlayerManager manager;
+        
         [ShowInInspector] private bool _isReadyToMove, _isReadyToPlay;
         
         internal void GetCannonData(CannonData cannonData)
@@ -47,17 +47,22 @@ namespace Controllers.Bullet
 
         private void Start()
         {
+            InstantiatePool();
+        }
+
+        private void InstantiatePool()
+        {
             _cannonParent = new GameObject("Cannons");
             _cannonPool = new List<GameObject>();
-            for (var i = 0; i < poolSize; i++)
+            for (var i = 0; i < _poolSize; i++)
             {
-                var cannon = Instantiate(CannonPrefab, _cannonParent.transform);
+                var cannon = Instantiate(cannonPrefab, _cannonParent.transform);
                 cannon.tag = "Cannon";
                 cannon.SetActive(false);
                 _cannonPool.Add(cannon);
             }
         }
-        
+
         internal void IsReadyToPlay(bool condition)
         {
             _isReadyToPlay = condition;
@@ -72,24 +77,13 @@ namespace Controllers.Bullet
         {
             Destroy(destroyGameObject);
         }
-        
-    
-        void Update()
+
+
+        private void FixedUpdate()
         {
             if (!_isReadyToMove || !_isReadyToPlay) return;
-            _shotTimer += Time.deltaTime;
-            if (_shotTimer >= data.CannonData.CannonReloadDuration)
-            {
-                _shotTimer = 0f;
-
-                var cannon = _cannonPool[_poolIndex];
-                _poolIndex = (_poolIndex + 1) % poolSize;
-
-                cannon.transform.position = transform.position + new Vector3(0,1,0);
-                cannon.SetActive(true);
-                cannon.transform.forward = transform.forward;
-            }
-
+            CannonReload();
+            
             foreach (var cannon in _cannonPool)
             {
                 if (!cannon.activeInHierarchy) continue;
@@ -110,13 +104,29 @@ namespace Controllers.Bullet
 
                     if (collider1.CompareTag("Enemy"))
                     {
-                        LevelPanel.Instance.OnKill();
+                        LevelPanel.Instance.Kill();
                         DestroyObject(collider1.gameObject);
                         cannon.SetActive(false);
                         break;
 
                     }
                 }
+            }
+        }
+
+        private void CannonReload()
+        {
+            _shotTimer += Time.deltaTime;
+            if (_shotTimer >= data.CannonData.CannonReloadDuration)
+            {
+                _shotTimer = 0f;
+
+                var cannon = _cannonPool[_poolIndex];
+                _poolIndex = (_poolIndex + 1) % _poolSize;
+
+                cannon.transform.position = transform.position + new Vector3(0, 1, 0);
+                cannon.SetActive(true);
+                cannon.transform.forward = transform.forward;
             }
         }
     }

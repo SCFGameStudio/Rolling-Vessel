@@ -8,7 +8,7 @@ namespace Managers
     {
         [SerializeField] private float rotationSpeed = 185f;
         [SerializeField] private float searchInterval = 1f; 
-        public List<GameObject> objectsToRotate = new();
+        private readonly List<GameObject> _objectsToRotate = new();
 
         private static RotationManager _instance;
         public static RotationManager Instance
@@ -30,19 +30,17 @@ namespace Managers
             StartCoroutine(SearchForNewObjects());
         }
         
-        
-
         private IEnumerator<WaitForSeconds> SearchForNewObjects()
         {
             while (true)
             {
-                GameObject[] newObjects = GameObject.FindGameObjectsWithTag("Level");
+                var newObjects = GameObject.FindGameObjectsWithTag("Level");
                 
                 foreach (GameObject obj in newObjects)
                 {
-                    if (objectsToRotate.Contains(obj)) continue;
+                    if (_objectsToRotate.Contains(obj)) continue;
                     obj.AddComponent<TurnLevelScript>();
-                    objectsToRotate.Add(obj);
+                    _objectsToRotate.Add(obj);
                 }
                 
                 yield return new WaitForSeconds(searchInterval);

@@ -16,9 +16,9 @@ namespace Handlers
         {
             if (other.CompareTag("Enemy"))
             {
-                if (LevelPanel.Instance.comboCount >= 1f)
+                if (LevelPanel.Instance.ComboCount >= 1f)
                 {
-                    LevelPanel.Instance.comboCount--;
+                    LevelPanel.Instance.ComboCount--;
                     Destroy(other.gameObject, 1f);
                 }
                 else

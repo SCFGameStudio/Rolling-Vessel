@@ -9,36 +9,18 @@ namespace Managers
 {
     public class InputManager : MonoBehaviour
     {
-        [ShowInInspector] [Header("Data")] private InputData _data;
-
-        private void Awake()
-        {
-            _data = GetInputData();
-        }
-
-        private static InputData GetInputData()
-        {
-            return Resources.Load<CD_Input>("Data/CD_Input").data;
-        }
-
-        private void OnEnable()
-        {
-            SubscribeEvents();
-        }
-
-        private void SubscribeEvents()
-        {
-        }
-
-        private void UnSubscribeEvents()
-        {
-            
-        }
-
-        private void OnDisable()
-        {
-            UnSubscribeEvents();
-        }
+        
+        // [ShowInInspector] [Header("Data")] private InputData _data;
+        //
+        // private void Awake()
+        // {
+        //     _data = GetInputData();
+        // }
+        //
+        // private static InputData GetInputData()
+        // {
+        //     return Resources.Load<CD_Input>("Data/CD_Input").data;
+        // }
 
         private void Update()
         {
@@ -57,12 +39,13 @@ namespace Managers
             BulletController.Instance.IsReadyToMove(true);
             BulletController.Instance.IsReadyToPlay(true);
         }
-        private void OnReset()
-        {
-            PlayerMovementController.Instance.IsReadyToMove(false);
-            PlayerMovementController.Instance.IsReadyToPlay(false);
-            BulletController.Instance.IsReadyToMove(false);
-            BulletController.Instance.IsReadyToPlay(false);
-        }
+        
+        // private void OnReset()
+        // {
+        //     PlayerMovementController.Instance.IsReadyToMove(false);
+        //     PlayerMovementController.Instance.IsReadyToPlay(false);
+        //     BulletController.Instance.IsReadyToMove(false);
+        //     BulletController.Instance.IsReadyToPlay(false);
+        // }
     }
 }

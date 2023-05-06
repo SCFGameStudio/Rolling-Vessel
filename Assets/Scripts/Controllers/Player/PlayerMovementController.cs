@@ -30,21 +30,24 @@ namespace Controllers.Player
             }
         }
         #endregion
-
-        #region Private variables
-
-
+        
+        
+        private void Awake()
+        {
+            _instance = this;
+        }
+        
         [ShowInInspector] private float _xValue;
+        
         private float2 _clampValues;
         private Vector3 _currentEulerAngles;
-        public Transform pivotPoint;
         private bool _hasBeenTriggered;
         private Vector3 _startPosition;
-        public int gameSpeed = 1;
-        public bool isRelentless;
-        #endregion
         
-        
+        public int GameSpeed = 1;
+        public bool IsRelentless;
+
+        [SerializeField] private Transform pivotPoint;
         [SerializeField] private new Collider collider;
         [SerializeField] private PlayerData data;
 
@@ -80,13 +83,7 @@ namespace Controllers.Player
             return Vector3.Distance(_startPosition, transform.position);
         }
 
-
-        private void Awake()
-        {
-            _instance = this;
-        }
-
-        private void LateUpdate()
+        private void Update()
         {
             if (!_isReadyToPlay)
             {
@@ -102,6 +99,7 @@ namespace Controllers.Player
 
             if (Input.GetMouseButtonDown(0) && !_hasBeenTriggered)
             {
+                PlayerMeshController.Instance.PlayWaterParticle();
                 InvokeRepeating(nameof(SpeedIncrease), 10f, 10f);
                 _hasBeenTriggered = true;
             }
@@ -146,7 +144,7 @@ namespace Controllers.Player
 
         private void SpeedIncrease()
         {
-            gameSpeed++;
+            GameSpeed++;
             data.MovementData.ForwardSpeed += 3f;
             data.MovementData.SidewaysSpeed += 3f;
             data.CannonData.CannonSpeed += 3f;
@@ -163,30 +161,29 @@ namespace Controllers.Player
             _isReadyToMove = condition;
         }
 
-
-        internal void OnReset()
-        {
-            StopPlayer();
-            _isReadyToMove = false;
-            _isReadyToPlay = false;
-        }
-
         IEnumerator Relentless()
         {
-            isRelentless = true;
+            IsRelentless = true;
             collider.enabled = false;
             data.MovementData.ForwardSpeed += data.RelentlessData.RelentlessSpeed;
             data.CannonData.CannonSpeed += data.RelentlessData.RelentlessSpeed;
             BulletController.Instance.GetCannonData(data.CannonData);
-            float sidewayspeed = data.MovementData.SidewaysSpeed;
+            float sidewaysSpeed = data.MovementData.SidewaysSpeed;
             data.MovementData.SidewaysSpeed = 0;
             yield return new WaitForSeconds(3f);
-            isRelentless = false;
+            IsRelentless = false;
             collider.enabled = true;
             data.MovementData.ForwardSpeed -= data.RelentlessData.RelentlessSpeed;
             data.CannonData.CannonSpeed -= data.RelentlessData.RelentlessSpeed;
             BulletController.Instance.GetCannonData(data.CannonData);
-            data.MovementData.SidewaysSpeed += sidewayspeed;
+            data.MovementData.SidewaysSpeed += sidewaysSpeed;
         }
+        
+        // internal void OnReset()
+        // {
+        //     StopPlayer();
+        //     _isReadyToMove = false;
+        //     _isReadyToPlay = false;
+        // }
     }
 }

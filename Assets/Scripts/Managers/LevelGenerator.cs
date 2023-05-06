@@ -7,14 +7,14 @@ namespace Managers
 {
     public class LevelGenerator : MonoBehaviour
     {
-        private const float PlayerDistanceSpawnLevelPart = 300f;
-        private const float LevelPartDestroyDistance = 800f;
+        private const float playerDistanceSpawnLevelPart = 300f;
+        private const float levelPartDestroyDistance = 800f;
+        private Vector3 _lastEndPosition;
 
         [SerializeField] private Transform levelPartStart;
         [SerializeField] private List<Transform> levelPartList;
         [SerializeField] private GameObject player;
-
-        private Vector3 _lastEndPosition;
+        
         [ShowInInspector]private List<Transform> _spawnedLevelParts = new();
 
         private void Awake()
@@ -29,7 +29,7 @@ namespace Managers
 
         private void Update()
         {
-            if (Vector3.Distance(player.transform.position, _lastEndPosition) < PlayerDistanceSpawnLevelPart)
+            if (Vector3.Distance(player.transform.position, _lastEndPosition) < playerDistanceSpawnLevelPart)
             {
                 SpawnLevelPart();
             }
@@ -37,7 +37,7 @@ namespace Managers
             for (var i = 0; i < _spawnedLevelParts.Count; i++)
             {
                 var levelPart = _spawnedLevelParts[i];
-                if (levelPart != null && Vector3.Distance(player.transform.position, levelPart.position) > LevelPartDestroyDistance)
+                if (levelPart != null && Vector3.Distance(player.transform.position, levelPart.position) > levelPartDestroyDistance)
                 {
                     _spawnedLevelParts.RemoveAt(i);
                     Destroy(levelPart.gameObject);

@@ -53,7 +53,7 @@ namespace Controllers.Player
                 BulletController.Instance.IsReadyToPlay(false);
                 ableToMove = false;
                 LevelPanel.Instance.StartGame(false);
-                LevelPanel.Instance.OnCrash();
+                LevelPanel.Instance.Crash();
             }
 
             if (collider.enabled && other.CompareTag("Obstacle"))
@@ -65,12 +65,12 @@ namespace Controllers.Player
                 BulletController.Instance.IsReadyToPlay(false);
                 ableToMove = false;
                 LevelPanel.Instance.StartGame(false);
-                LevelPanel.Instance.OnCrash();
+                LevelPanel.Instance.Crash();
             }
             
             if (collider.enabled && other.CompareTag("Treasure"))
             {
-                LevelPanel.Instance.OnCollect();
+                LevelPanel.Instance.Collect();
                 DestroyObject(other.gameObject);
 
             }

@@ -25,7 +25,8 @@ namespace Controllers.Player
         }
         #endregion
         
-        [SerializeField] private ParticleSystem waterParticle;
+        [SerializeField] private ParticleSystem leftWaterParticle;
+        [SerializeField] private ParticleSystem rightWaterParticle;
         [SerializeField] private ParticleSystem fireParticle;
         [SerializeField] private ParticleSystem destroyParticle;
         [SerializeField] private new Renderer renderer;
@@ -34,11 +35,14 @@ namespace Controllers.Player
         private void Awake()
         {
             _instance = this;
+            leftWaterParticle.Stop();
+            rightWaterParticle.Stop();
         }
 
         public void PlayWaterParticle()
         {
-            waterParticle.Play();
+            leftWaterParticle.Play();
+            rightWaterParticle.Play();
         }
         
         public void PlayFireParticle()

@@ -24,33 +24,35 @@ namespace Controllers.Level
                 return _instance;
             }
         }
+        private void Awake()
+        {
+            _instance = this;
+        }
+        
+        public int ComboCount;
+        
         private float _totalDistanceTraveled;
         private int _coinCount;
-        public int comboCount;
         private bool _gameStarted;
         private PlayerManager _playerManager;
-        [SerializeField]private GameObject levelPanel;
-        [SerializeField]private GameObject losePanel;
+        
+        [SerializeField] private GameObject levelPanel;
+        [SerializeField] private GameObject losePanel;
         [SerializeField] private TextMeshProUGUI failPanelText;
         [SerializeField] private Image ınvulnerabilityImage;
         [SerializeField] private Image relentlessImage;
         [SerializeField] private TextMeshProUGUI highScoreText;
 
-        private void Awake()
-        {
-            _instance = this;
-        }
-
         private void Update()
         {
             if (!_gameStarted) return;
-            var distanceFloatThisFrame = PlayerMovementController.Instance.gameSpeed * Time.deltaTime * 100;
+            var distanceFloatThisFrame = PlayerMovementController.Instance.GameSpeed * Time.deltaTime * 100;
             var distanceThisFrame = Mathf.RoundToInt(distanceFloatThisFrame);
             _totalDistanceTraveled += distanceThisFrame;
         }
         
-        
-        public void StartGame(bool state) {
+        public void StartGame(bool state) 
+        {
             _gameStarted = state;
         }
 
@@ -68,24 +70,24 @@ namespace Controllers.Level
                 ınvulnerabilityImage.color = new Color(100, 100, 100, 1f);
             }
 
-            if (comboCount >= 10)
+            if (ComboCount >= 10)
             {
                 relentlessImage.color = new Color(100, 100, 100, 1f);
             }
 
-            if (comboCount < 10)
+            if (ComboCount < 10)
             {
                 relentlessImage.color = new Color(100, 100, 100, 0.4f);
             }
             
         }
 
-        public void OnRelentlessButtonClicked()
+        public void RelentlessButtonClicked()
         {
-            if (comboCount >= 10)
+            if (ComboCount >= 10)
             {
                 PlayerMovementController.Instance.RelentlessSkill();
-                comboCount = 0;
+                ComboCount = 0;
             }
             else
             {
@@ -93,7 +95,7 @@ namespace Controllers.Level
             }
         }
 
-        public void OnInvulnerabilityButtonClicked()
+        public void InvulnerabilityButtonClicked()
         {
             if (PlayerPhysicsController.Instance.isInvulnerabilityAvailable)
             {
@@ -106,32 +108,32 @@ namespace Controllers.Level
 
         }
 
-        public void OnCrash()
+        public void Crash()
         {
             levelPanel.gameObject.SetActive(false);
             losePanel.gameObject.SetActive(true);
             failPanelText.text = _totalDistanceTraveled.ToString(CultureInfo.InvariantCulture);
         }
 
-        public void OnRestartButtonClicked()
+        public void RestartButtonClicked()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        public void OnMainMenuButtonClicked()
+        public void MainMenuButtonClicked()
         {
             SceneManager.LoadScene(0);
         }
 
-        public void OnCollect()
+        public void Collect()
         {
             _totalDistanceTraveled += 1000;
             _coinCount++;
         }
 
-        public void OnKill()
+        public void Kill()
         {
-            comboCount++;
+            ComboCount++;
         }
     }
 }
