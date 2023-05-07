@@ -33,7 +33,7 @@ namespace Managers
             // }
             if (Input.touchCount <= 0) return;
             var touch = Input.GetTouch(0);
-            if (touch.phase != TouchPhase.Began || !PlayerPhysicsController.Instance.ableToMove) return;
+            if (touch.phase != TouchPhase.Began || !PlayerPhysicsController.Instance.AbleToMove) return;
             PlayerMovementController.Instance.IsReadyToMove(true);
             PlayerMovementController.Instance.IsReadyToPlay(true);
             BulletController.Instance.IsReadyToMove(true);

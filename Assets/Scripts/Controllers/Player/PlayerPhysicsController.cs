@@ -26,46 +26,34 @@ namespace Controllers.Player
         }
         #endregion
         
+        
+        private void Awake()
+        {
+            _instance = this;
+        }
+        
         [SerializeField] private InvulnerabilityData _ınvulnerabilityData;
         [SerializeField] private new Collider collider;
-        public bool isInvulnerabilityAvailable = true;
-        public bool ableToMove = true;
+        
+        public bool IsInvulnerabilityAvailable = true;
+        public bool AbleToMove = true;
 
         internal void GetInvulnerabilityData(InvulnerabilityData ınvulnerabilityData)
         {
             _ınvulnerabilityData = ınvulnerabilityData;
         }
-
-
-        private void Awake()
-        {
-            _instance = this;
-        }
+        
 
         private void OnTriggerEnter(Collider other)
         {
             if(collider.enabled && other.CompareTag("Enemy"))
             {
-                PlayerMovementController.Instance.StopPlayer();
-                PlayerMovementController.Instance.IsReadyToMove(false);
-                PlayerMovementController.Instance.IsReadyToPlay(false);
-                BulletController.Instance.IsReadyToMove(false);
-                BulletController.Instance.IsReadyToPlay(false);
-                ableToMove = false;
-                LevelPanel.Instance.StartGame(false);
-                LevelPanel.Instance.Crash();
+                CrashEnemy();
             }
 
             if (collider.enabled && other.CompareTag("Obstacle"))
             {
-                PlayerMovementController.Instance.StopPlayer();
-                PlayerMovementController.Instance.IsReadyToMove(false);
-                PlayerMovementController.Instance.IsReadyToPlay(false);
-                BulletController.Instance.IsReadyToMove(false);
-                BulletController.Instance.IsReadyToPlay(false);
-                ableToMove = false;
-                LevelPanel.Instance.StartGame(false);
-                LevelPanel.Instance.Crash();
+                CrashObstacle();
             }
             
             if (collider.enabled && other.CompareTag("Treasure"))
@@ -76,26 +64,48 @@ namespace Controllers.Player
             }
         }
 
+        private void CrashObstacle()
+        {
+            PlayerMovementController.Instance.StopPlayer();
+            PlayerMovementController.Instance.IsReadyToMove(false);
+            PlayerMovementController.Instance.IsReadyToPlay(false);
+            BulletController.Instance.IsReadyToMove(false);
+            BulletController.Instance.IsReadyToPlay(false);
+            AbleToMove = false;
+            LevelPanel.Instance.StartGame(false);
+            LevelPanel.Instance.Crash();
+        }
+
+        private void CrashEnemy()
+        {
+            PlayerMovementController.Instance.StopPlayer();
+            PlayerMovementController.Instance.IsReadyToMove(false);
+            PlayerMovementController.Instance.IsReadyToPlay(false);
+            BulletController.Instance.IsReadyToMove(false);
+            BulletController.Instance.IsReadyToPlay(false);
+            AbleToMove = false;
+            LevelPanel.Instance.StartGame(false);
+            LevelPanel.Instance.Crash();
+        }
+
         private void DestroyObject(GameObject objectsGameObject)
         {
-            
             Destroy(objectsGameObject);
         }
 
-
         public IEnumerator Invulnerability()
         {
-            isInvulnerabilityAvailable = false;
+            IsInvulnerabilityAvailable = false;
             collider.enabled = false;
             yield return new WaitForSeconds(_ınvulnerabilityData.InvulnerabilityDuration);
             collider.enabled = true;
             yield return new WaitForSeconds(2f);
-            isInvulnerabilityAvailable = true;
+            IsInvulnerabilityAvailable = true;
         }
         
-        internal void OnReset()
-        {
-            ableToMove = true;
-        }
+        // internal void OnReset()
+        // {
+        //     AbleToMove = true;
+        // }
     }
 }

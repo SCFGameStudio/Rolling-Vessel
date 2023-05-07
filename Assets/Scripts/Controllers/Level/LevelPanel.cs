@@ -60,12 +60,12 @@ namespace Controllers.Level
         {
             highScoreText.text = _totalDistanceTraveled.ToString(CultureInfo.InvariantCulture);
 
-            if (PlayerPhysicsController.Instance.isInvulnerabilityAvailable == false)
+            if (PlayerPhysicsController.Instance.IsInvulnerabilityAvailable == false)
             {
                 ınvulnerabilityImage.color = new Color(100, 100, 100, 0.4f);
             }
 
-            if (PlayerPhysicsController.Instance.isInvulnerabilityAvailable)
+            if (PlayerPhysicsController.Instance.IsInvulnerabilityAvailable)
             {
                 ınvulnerabilityImage.color = new Color(100, 100, 100, 1f);
             }
@@ -97,7 +97,7 @@ namespace Controllers.Level
 
         public void InvulnerabilityButtonClicked()
         {
-            if (PlayerPhysicsController.Instance.isInvulnerabilityAvailable)
+            if (PlayerPhysicsController.Instance.IsInvulnerabilityAvailable)
             {
                 PlayerMovementController.Instance.InvulnerabilitySkill();
             }
