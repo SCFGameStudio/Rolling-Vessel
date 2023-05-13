@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data:
     movementData:
-      EnemySidewaysSpeed: 0
+      EnemySidewaysSpeed: 30

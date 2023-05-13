@@ -6,16 +6,16 @@ namespace Controllers.Level
     public class MenuPanel : MonoBehaviour
     {
 
-        public void OnPlayButtonClicked()
+        public void PlayButtonClicked()
         {
             SceneManager.LoadScene("MainScene");
         }
 
-        public void OnOptionsButtonClicked()
+        public void OptionsButtonClicked()
         {
         }
 
-        public void OnCreditsButtonClicked()
+        public void CreditsButtonClicked()
         {
         }
     }
