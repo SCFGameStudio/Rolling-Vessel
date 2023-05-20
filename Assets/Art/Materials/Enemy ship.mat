@@ -8,14 +8,24 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Enemy ship
-  m_Shader: {fileID: 4800000, guid: 8d2bb70cbf9db8d4da26e15b26e74248, type: 3}
+  m_Shader: {fileID: 4800000, guid: 6c046203321edf34fb092959a05e5b4a, type: 3}
   m_ValidKeywords:
+  - _MK_ALBEDO_MAP
+  - _MK_ARTISTIC_PROJECTION_SCREEN_SPACE
+  - _MK_ENVIRONMENT_REFLECTIONS_AMBIENT
+  - _MK_LIGHT_CEL
+  - _MK_NORMAL_MAP
+  - _MK_RECEIVE_SHADOWS
+  - _MK_SPECULAR_ISOTROPIC
+  - _MK_WRAPPED_DIFFUSE
+  m_InvalidKeywords:
   - _NORMALMAP
-  m_InvalidKeywords: []
+  - _RECEIVESHADOWS_ON
+  - _WRAPPEDLIGHTING_ON
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     IGNOREPROJECTOR: False
     RenderType: Opaque
@@ -103,6 +113,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _OutlineMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 2800000, guid: c02ada82e6aba56459ae62d1582f4220, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -179,7 +193,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DiffuseSmoothness: 0
+    - _DiffuseSmoothness: 0.43
     - _DiffuseThresholdOffset: 0.25
     - _Dissolve: 0
     - _DissolveAmount: 0.5
@@ -209,7 +223,7 @@ Material:
     - _Light: 1
     - _LightBands: 4
     - _LightBandsScale: 0.5
-    - _LightThreshold: 0.5
+    - _LightThreshold: 0.663
     - _Metallic: 0
     - _Mode: 0
     - _NormalMapIntensity: 1
@@ -218,6 +232,12 @@ Material:
     - _Offset2: 0
     - _OptionsTab: 1
     - _Outline: 1
+    - _OutlineData: 0
+    - _OutlineFadeMax: 2
+    - _OutlineFadeMin: 0.25
+    - _OutlineNoise: 0
+    - _OutlineSize: 5
+    - _OutlineTab: 0
     - _Parallax: 0.02
     - _QueueOffset: 0
     - _RampSmooth: 0.1
@@ -236,7 +256,7 @@ Material:
     - _SketchHalftoneMax: 1
     - _SketchHalftoneMin: 0.2
     - _SketchMapScale: 1
-    - _Smoothness: 0.5
+    - _Smoothness: 0.746
     - _SmoothnessSource: 1
     - _SmoothnessTextureChannel: 0
     - _SpecSmooth: 0.05
@@ -256,7 +276,7 @@ Material:
     - _StencilRef: 0
     - _StencilWriteMask: 255
     - _StencilZFail: 0
-    - _StylizeTab: 0
+    - _StylizeTab: 1
     - _Surface: 0
     - _TexLod: 5
     - _ThresholdMapScale: 1
