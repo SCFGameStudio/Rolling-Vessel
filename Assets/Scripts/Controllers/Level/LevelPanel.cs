@@ -122,6 +122,7 @@ namespace Controllers.Level
 
         public void MainMenuButtonClicked()
         {
+            PlayerPrefsManager.SavePlayerPrefsData();
             SceneManager.LoadScene(0);
         }
 

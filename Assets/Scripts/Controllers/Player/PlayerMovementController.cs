@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Controllers.Bullet;
 using Controllers.Level;
+using Data.UnityObjects;
 using Data.ValueObjects;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -31,10 +32,10 @@ namespace Controllers.Player
         }
         #endregion
         
-        
         private void Awake()
         {
             _instance = this;
+            inputSensitivity = PlayerPrefs.GetFloat("InputSensitivity");
         }
         
         [ShowInInspector] private float _xValue;
@@ -43,6 +44,7 @@ namespace Controllers.Player
         private Vector3 _currentEulerAngles;
         private bool _hasBeenTriggered;
         private Vector3 _startPosition;
+        private float inputSensitivity;
         
         public int GameSpeed = 1;
         public bool IsRelentless;
@@ -76,6 +78,7 @@ namespace Controllers.Player
         private void Start()
         {
             _startPosition = transform.position;
+            Debug.Log(inputSensitivity);
         }
 
         public float GetDistanceTraveled()
@@ -117,11 +120,12 @@ namespace Controllers.Player
             //     _currentEulerAngles.z = Mathf.Clamp(_currentEulerAngles.z, -16f, 16f);
             //     pivotPoint.localEulerAngles = _currentEulerAngles;
             // }
+            
             if (Input.touchCount <= 0) return;
             var touch = Input.GetTouch(0);
             if (touch.phase != TouchPhase.Moved) return;
             var touchDeltaX = touch.deltaPosition.x;
-            _currentEulerAngles += new Vector3(0, 0, touchDeltaX) * Time.deltaTime * data.MovementData.SidewaysSpeed;
+            _currentEulerAngles += new Vector3(0, 0, touchDeltaX) * Time.deltaTime * data.MovementData.SidewaysSpeed * inputSensitivity;
             _currentEulerAngles.z = Mathf.Clamp(_currentEulerAngles.z, -16f, 16f);
             pivotPoint.localEulerAngles = _currentEulerAngles;
         }
