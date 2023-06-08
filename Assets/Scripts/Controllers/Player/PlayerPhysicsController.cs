@@ -3,6 +3,7 @@ using Controllers.Bullet;
 using Controllers.Level;
 using UnityEngine;
 using Data.ValueObjects;
+using Managers;
 
 namespace Controllers.Player
 {
@@ -34,6 +35,9 @@ namespace Controllers.Player
         
         [SerializeField] private InvulnerabilityData _ınvulnerabilityData;
         [SerializeField] private new Collider collider;
+        [SerializeField] private Material transparentShipMaterial;
+        [SerializeField] private Material shipMaterial;
+        [SerializeField] private Renderer shipRenderer;
         
         public bool IsInvulnerabilityAvailable = true;
         public bool AbleToMove = true;
@@ -59,6 +63,10 @@ namespace Controllers.Player
             if (collider.enabled && other.CompareTag("Treasure"))
             {
                 LevelPanel.Instance.Collect();
+                if (PlayerPrefs.GetString("SoundSetting") == "On")
+                {
+                    AudioManager.instance.Play("TreasureCollectSound");
+                }
                 DestroyObject(other.gameObject);
 
             }
@@ -66,7 +74,6 @@ namespace Controllers.Player
 
         private void CrashObstacle()
         {
-            PlayerMovementController.Instance.StopPlayer();
             PlayerMovementController.Instance.IsReadyToMove(false);
             PlayerMovementController.Instance.IsReadyToPlay(false);
             BulletController.Instance.IsReadyToMove(false);
@@ -74,11 +81,11 @@ namespace Controllers.Player
             AbleToMove = false;
             LevelPanel.Instance.StartGame(false);
             LevelPanel.Instance.Crash();
+            
         }
 
         private void CrashEnemy()
         {
-            PlayerMovementController.Instance.StopPlayer();
             PlayerMovementController.Instance.IsReadyToMove(false);
             PlayerMovementController.Instance.IsReadyToPlay(false);
             BulletController.Instance.IsReadyToMove(false);
@@ -97,15 +104,12 @@ namespace Controllers.Player
         {
             IsInvulnerabilityAvailable = false;
             collider.enabled = false;
+            shipRenderer.material = transparentShipMaterial;
             yield return new WaitForSeconds(_ınvulnerabilityData.InvulnerabilityDuration);
             collider.enabled = true;
+            shipRenderer.material = shipMaterial;
             yield return new WaitForSeconds(2f);
             IsInvulnerabilityAvailable = true;
         }
-        
-        // internal void OnReset()
-        // {
-        //     AbleToMove = true;
-        // }
     }
 }

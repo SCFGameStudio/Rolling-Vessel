@@ -37,12 +37,8 @@ namespace Controllers.Level
 
         private void Update()
         {
-            // if (PlayerMovementController.Instance.isRelentless) return;
-            // if (!Input.GetMouseButton(0) || PlayerPhysicsController.Instance.ableToMove != true) return;
-            // var mouseX = Input.GetAxis("Mouse X");
-            // _currentEulerAngles += new Vector3(0, 0, -mouseX) * (Time.deltaTime * RotationManager.Instance.GetRotationSpeed());
-            // transform.localEulerAngles = _currentEulerAngles;
             if (PlayerMovementController.Instance.IsRelentless) return;
+            if (PlayerPhysicsController.Instance.AbleToMove == false) return;
             if (Input.touchCount <= 0) return;
             var touch = Input.GetTouch(0);
             if (touch.phase != TouchPhase.Moved) return;

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Controllers.Player;
 using Managers;
 using TMPro;
@@ -28,7 +29,15 @@ namespace Controllers.Level
         {
             _instance = this;
         }
-        
+
+        private void Start()
+        {
+            if (PlayerPrefs.GetString("MusicSetting") == "On")
+            {
+                AudioManager.instance.Play("InGameMusic");
+            }
+        }
+
         public int ComboCount;
         
         private float _totalDistanceTraveled;
@@ -110,6 +119,11 @@ namespace Controllers.Level
 
         public void Crash()
         {
+            if (PlayerPrefs.GetString("MusicSetting") == "On")
+            {
+                AudioManager.instance.Stop("InGameMusic");
+                AudioManager.instance.Play("GameOverMusic");
+            }
             levelPanel.gameObject.SetActive(false);
             losePanel.gameObject.SetActive(true);
             failPanelText.text = _totalDistanceTraveled.ToString(CultureInfo.InvariantCulture);
@@ -118,11 +132,19 @@ namespace Controllers.Level
         public void RestartButtonClicked()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            if (PlayerPrefs.GetString("MusicSetting") == "On")
+            {
+                AudioManager.instance.Stop("GameOverMusic");
+            }
         }
 
         public void MainMenuButtonClicked()
         {
             PlayerPrefsManager.SavePlayerPrefsData();
+            if (PlayerPrefs.GetString("MusicSetting") == "On")
+            {
+                AudioManager.instance.Stop("GameOverMusic");
+            }
             SceneManager.LoadScene(0);
         }
 

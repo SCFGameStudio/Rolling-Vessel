@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Controllers.Level;
 using Data.ValueObjects;
+using Managers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -105,6 +106,11 @@ namespace Controllers.Bullet
                     if (collider1.CompareTag("Enemy"))
                     {
                         LevelPanel.Instance.Kill();
+                        if (PlayerPrefs.GetString("SoundSetting") == "On")
+                        {
+                            AudioManager.instance.Play("EnemyCrashSound");
+                        }
+
                         DestroyObject(collider1.gameObject);
                         cannon.SetActive(false);
                         break;
@@ -127,6 +133,10 @@ namespace Controllers.Bullet
                 cannon.transform.position = transform.position + new Vector3(0, 1, 0);
                 cannon.SetActive(true);
                 cannon.transform.forward = transform.forward;
+                if (PlayerPrefs.GetString("SoundSetting") == "On")
+                {
+                    AudioManager.instance.Play("CannonShotSound");
+                }
             }
         }
     }

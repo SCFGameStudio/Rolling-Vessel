@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using Controllers.Bullet;
 using Controllers.Level;
-using Data.UnityObjects;
 using Data.ValueObjects;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -112,15 +111,6 @@ namespace Controllers.Player
         private void MovePlayer()
         {
             pivotPoint.transform.Translate(Vector3.forward * data.MovementData.ForwardSpeed * Time.deltaTime);
-            
-            // if (Input.GetMouseButton(0))
-            // {
-            //     float mouseX = Input.GetAxis("Mouse X");
-            //     _currentEulerAngles += new Vector3(0, 0, mouseX) * Time.deltaTime * data.MovementData.SidewaysSpeed;
-            //     _currentEulerAngles.z = Mathf.Clamp(_currentEulerAngles.z, -16f, 16f);
-            //     pivotPoint.localEulerAngles = _currentEulerAngles;
-            // }
-            
             if (Input.touchCount <= 0) return;
             var touch = Input.GetTouch(0);
             if (touch.phase != TouchPhase.Moved) return;
@@ -182,12 +172,5 @@ namespace Controllers.Player
             BulletController.Instance.GetCannonData(data.CannonData);
             data.MovementData.SidewaysSpeed += sidewaysSpeed;
         }
-        
-        // internal void OnReset()
-        // {
-        //     StopPlayer();
-        //     _isReadyToMove = false;
-        //     _isReadyToPlay = false;
-        // }
     }
 }
